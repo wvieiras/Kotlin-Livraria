@@ -1,0 +1,13 @@
+micronaut:
+  application:
+    name: minhaCasaDoCodigo
+datasources:
+  default:
+    url: jdbc:mysql://localhost:3306/cdc?createDatabaseIfNotExist=true&serverTimezone=UTC
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: '#Zup202177'
+    dialect: MYSQL
+jpa.default.properties.hibernate.hbm2ddl.auto: update
+
+#jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
