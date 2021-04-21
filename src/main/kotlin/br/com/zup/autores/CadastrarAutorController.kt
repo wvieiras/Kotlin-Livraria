@@ -4,6 +4,7 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpResponse.notFound
 import io.micronaut.http.HttpResponse.ok
 import io.micronaut.http.annotation.*
+import io.micronaut.http.uri.UriBuilder
 import io.micronaut.validation.Validated
 import javax.transaction.Transactional
 import javax.validation.Valid
@@ -13,10 +14,16 @@ import javax.validation.Valid
 class CadastrarAutorController(val autorRepository: AutorRepository) {
 
     @Post
-    fun cadastra(@Body @Valid request: NovoAutorRequest){
+    @Transactional
+    fun cadastra(@Body @Valid request: NovoAutorRequest): HttpResponse<Any>{
 
         val autor = request.toMode()
         autorRepository.save(autor)
+
+        val uri = UriBuilder.of("/autores/{id}")
+            .expand(mutableMapOf(Pair("id", autor.id)))
+
+        return HttpResponse.created(uri)
 
     }
 
@@ -44,6 +51,7 @@ class CadastrarAutorController(val autorRepository: AutorRepository) {
     }
 
     @Put("/{id}")
+    @Transactional
     fun put(@PathVariable id: Long, descricao: String): HttpResponse<Any>{
 
         //buscar o objeto no banco
@@ -67,6 +75,7 @@ class CadastrarAutorController(val autorRepository: AutorRepository) {
     }
 
     @Delete("/{id}")
+    @Transactional
     fun del(@PathVariable id: Long): HttpResponse<Any>{
 
         val possivelAutor = autorRepository.findById(id)
